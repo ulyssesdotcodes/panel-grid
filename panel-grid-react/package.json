@@ -2,6 +2,7 @@
   "name": "panel-grid-react",
   "version": "0.0.1",
   "description": "React version of panel-grid",
+  "url": "https://github.com/ulyssesdotcodes/panel-grid",
   "main": "dist/panel-grid-react.js",
   "module": "dist/panel-grid-react.mjs",
   "typings": "dist/panel-grid-react.d.ts",
