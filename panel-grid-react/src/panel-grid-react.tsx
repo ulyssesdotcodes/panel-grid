@@ -26,6 +26,7 @@ import {
   minimizeTemplateSizes,
   eq,
   cloneDeep,
+  capitalizeFirstLetter,
 } from "./utilities";
 
 const ResizeBarElement: FunctionComponent<{
@@ -157,7 +158,8 @@ export const Panel: FunctionComponent<
         display: "flex",
         flexDirection: "column",
         padding: "0.8em",
-        [`border-${resizeBar.position}`]: resizeBorderStyle,
+        [`border${capitalizeFirstLetter(resizeBar.position)}`]:
+          resizeBorderStyle,
         gap: "0.4em",
         gridArea,
         ...style,

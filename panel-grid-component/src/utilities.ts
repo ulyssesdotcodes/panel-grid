@@ -40,40 +40,40 @@ export const gridTemplateSizeToString = (gridTemplateSize: GridTemplateSize) =>
   typeof gridTemplateSize === "string"
     ? gridTemplateSize
     : gridTemplateSize._kind === "auto"
-      ? "auto"
-      : gridTemplateSize._kind === "fr"
-        ? `${gridTemplateSize.value}fr`
-        : gridTemplateSize._kind === "em"
-          ? `${gridTemplateSize.value}em`
-          : `${gridTemplateSize.value}px`;
+    ? "auto"
+    : gridTemplateSize._kind === "fr"
+    ? `${gridTemplateSize.value}fr`
+    : gridTemplateSize._kind === "em"
+    ? `${gridTemplateSize.value}em`
+    : `${gridTemplateSize.value}px`;
 
 export const gridTemplateSizeFromString = (
-  gridTemplateSize: string,
+  gridTemplateSize: string
 ): GridTemplateSize =>
   gridTemplateSize === "auto"
     ? { _kind: "auto" }
     : gridTemplateSize.endsWith("fr")
-      ? {
-          _kind: "fr",
-          value: Number(
-            gridTemplateSize.substring(0, gridTemplateSize.length - 2),
-          ),
-        }
-      : gridTemplateSize.endsWith("px")
-        ? {
-            _kind: "px",
-            value: Number(
-              gridTemplateSize.substring(0, gridTemplateSize.length - 2),
-            ),
-          }
-        : gridTemplateSize.endsWith("em")
-          ? {
-              _kind: "em",
-              value: Number(
-                gridTemplateSize.substring(0, gridTemplateSize.length - 2),
-              ),
-            }
-          : gridTemplateSize;
+    ? {
+        _kind: "fr",
+        value: Number(
+          gridTemplateSize.substring(0, gridTemplateSize.length - 2)
+        ),
+      }
+    : gridTemplateSize.endsWith("px")
+    ? {
+        _kind: "px",
+        value: Number(
+          gridTemplateSize.substring(0, gridTemplateSize.length - 2)
+        ),
+      }
+    : gridTemplateSize.endsWith("em")
+    ? {
+        _kind: "em",
+        value: Number(
+          gridTemplateSize.substring(0, gridTemplateSize.length - 2)
+        ),
+      }
+    : gridTemplateSize;
 
 type BorderPosition = "top" | "right" | "bottom" | "left";
 
@@ -82,11 +82,6 @@ export type ResizeBar = {
   position: BorderPosition;
   minSize?: number;
   maxSize?: number;
-};
-
-export type PanelGridState = {
-  areaNames: string[][];
-  areaRects: AreaRects;
 };
 
 export type GridTemplates = {
@@ -111,7 +106,7 @@ const DEFAULT_RESIZE_BAR_SIZE = 16;
 export const resizeBarPosition = (
   panelGridState: PanelGridState,
   resizeBar: ResizeBar,
-  width = DEFAULT_RESIZE_BAR_SIZE,
+  width = DEFAULT_RESIZE_BAR_SIZE
 ): Rect & { resizeBar: ResizeBar } => ({
   resizeBar,
   x:
@@ -162,7 +157,7 @@ export const eq = <T>(a: T, b: T): boolean =>
 
 export const findTemplateIndex = (
   areaNames: string[][],
-  resizeBar: ResizeBar,
+  resizeBar: ResizeBar
 ): TemplateIndex | undefined =>
   resizeBar.position === "top"
     ? areaNames.reduce<TemplateIndex | undefined>(
@@ -170,55 +165,56 @@ export const findTemplateIndex = (
           acc ?? row.includes(resizeBar.areaName)
             ? { _kind: "row", value: idx }
             : undefined,
-        undefined,
+        undefined
       )
     : resizeBar.position === "bottom"
-      ? toReversed(areaNames).reduce<TemplateIndex | undefined>(
-          (acc, row, idx) =>
-            acc ??
-            (row.includes(resizeBar.areaName)
-              ? { _kind: "row", value: areaNames.length - 1 - idx }
-              : undefined),
-          undefined,
-        )
-      : resizeBar.position === "left"
-        ? areaNames.reduce<TemplateIndex | undefined>(
-            (acc, row) =>
-              acc ??
-              (row.indexOf(resizeBar.areaName) !== -1
-                ? { _kind: "column", value: row.indexOf(resizeBar.areaName) }
-                : undefined),
-            undefined,
-          )
-        : resizeBar.position === "right"
-          ? areaNames.reduce<TemplateIndex | undefined>(
-              (acc, row) =>
-                acc ??
-                (row.indexOf(resizeBar.areaName) !== -1
-                  ? {
-                      _kind: "column",
-                      value:
-                        row.length -
-                        1 -
-                        toReversed(row).indexOf(resizeBar.areaName),
-                    }
-                  : undefined),
-              undefined,
-            )
-          : undefined;
+    ? toReversed(areaNames).reduce<TemplateIndex | undefined>(
+        (acc, row, idx) =>
+          acc ??
+          (row.includes(resizeBar.areaName)
+            ? { _kind: "row", value: areaNames.length - 1 - idx }
+            : undefined),
+        undefined
+      )
+    : resizeBar.position === "left"
+    ? areaNames.reduce<TemplateIndex | undefined>(
+        (acc, row) =>
+          acc ??
+          (row.indexOf(resizeBar.areaName) !== -1
+            ? { _kind: "column", value: row.indexOf(resizeBar.areaName) }
+            : undefined),
+        undefined
+      )
+    : resizeBar.position === "right"
+    ? areaNames.reduce<TemplateIndex | undefined>(
+        (acc, row) =>
+          acc ??
+          (row.indexOf(resizeBar.areaName) !== -1
+            ? {
+                _kind: "column",
+                value:
+                  row.length - 1 - toReversed(row).indexOf(resizeBar.areaName),
+              }
+            : undefined),
+        undefined
+      )
+    : undefined;
 
-export const capitalizeFirstLetter = (str: string) =>
-  str.at(0).toUpperCase() + str.substring(1);
+export const CAPITALIZED_TEMPLATE_INDEX = {
+  row: "Row",
+  column: "Column",
+};
 
 export const updateTemplateSizes = (
   state: PanelGridState,
   resize: Resize,
-  gridTemplates: GridTemplates,
+  gridTemplates: GridTemplates
 ): GridTemplates => {
   const templateIndex = findTemplateIndex(state.areaNames, resize.resizeBar);
   if (!templateIndex) return gridTemplates;
 
-  const capitalizedTemplateIndex = capitalizeFirstLetter(templateIndex._kind);
+  const capitalizedTemplateIndex =
+    CAPITALIZED_TEMPLATE_INDEX[templateIndex._kind];
 
   return {
     ...gridTemplates,
@@ -242,9 +238,9 @@ export const updateTemplateSizes = (
               : (resize.end.x - resize.start.x) *
                 (resize.resizeBar.position === "left" ? -1 : 1)),
           resize.resizeBar.minSize ?? -Infinity,
-          resize.resizeBar.maxSize ?? Infinity,
+          resize.resizeBar.maxSize ?? Infinity
         ),
-      },
+      }
     ),
   };
 };
@@ -253,7 +249,7 @@ export const minimizeTemplateSizes = (
   resizedTemplateSizes: GridTemplates,
   resizeBars: ResizeBar[],
   areaNames: string[][],
-  direction: "row" | "column",
+  direction: "row" | "column"
 ) => {
   const capitalizedDirection = direction === "row" ? "Rows" : "Columns";
   const key = `gridTemplate${capitalizedDirection}` as keyof GridTemplates;
@@ -267,11 +263,11 @@ export const minimizeTemplateSizes = (
               rb.areaName === ma.area &&
               (direction === "row"
                 ? rb.position === "bottom" || rb.position === "top"
-                : rb.position === "right" || rb.position === "left"),
-          ),
+                : rb.position === "right" || rb.position === "left")
+          )
       );
       const minimizedArea = areaNames[idx].map((area) =>
-        templateSizeMinimized.find((ma) => ma.area === area),
+        templateSizeMinimized.find((ma) => ma.area === area)
       )[0];
 
       return minimizedArea?.size ?? templateSize;
@@ -280,7 +276,7 @@ export const minimizeTemplateSizes = (
 };
 
 export const calculateAdjacentAreas = (
-  areaNames: string[][],
+  areaNames: string[][]
 ): AdjacentAreaPair[] => {
   const adjacentAreaPairs: AdjacentAreaPair[] = [];
   for (let y = 0; y < areaNames.length; y++) {
@@ -323,31 +319,28 @@ export const calculateAdjacentAreas = (
 };
 
 export const combineAdjacentAreas = (
-  adjacentAreaPairs: AdjacentAreaPair[],
+  adjacentAreaPairs: AdjacentAreaPair[]
 ): AdjacentAreaPair[] =>
   Object.values(
-    adjacentAreaPairs.reduce(
-      (acc, value) => {
-        const currentFrom = acc[value.from] ?? {};
-        const currentTo = currentFrom[value.to] ?? value;
-        return {
-          ...acc,
-          [value.from]: {
-            ...currentFrom,
-            [value.to]: {
-              ...currentTo,
-              row: {
-                start: Math.min(currentTo.row.start, value.row.start),
-                end: Math.max(currentTo.row.end, value.row.end),
-              },
-              column: {
-                start: Math.min(currentTo.column.start, value.column.start),
-                end: Math.max(currentTo.column.end, value.column.end),
-              },
+    adjacentAreaPairs.reduce((acc, value) => {
+      const currentFrom = acc[value.from] ?? {};
+      const currentTo = currentFrom[value.to] ?? value;
+      return {
+        ...acc,
+        [value.from]: {
+          ...currentFrom,
+          [value.to]: {
+            ...currentTo,
+            row: {
+              start: Math.min(currentTo.row.start, value.row.start),
+              end: Math.max(currentTo.row.end, value.row.end),
+            },
+            column: {
+              start: Math.min(currentTo.column.start, value.column.start),
+              end: Math.max(currentTo.column.end, value.column.end),
             },
           },
-        };
-      },
-      {} as Record<string, Record<string, AdjacentAreaPair>>,
-    ),
+        },
+      };
+    }, {} as Record<string, Record<string, AdjacentAreaPair>>)
   ).flatMap((o) => Object.values(o));

@@ -1,6 +1,6 @@
 {
   "name": "panel-grid-react",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "React version of panel-grid",
   "url": "https://github.com/ulyssesdotcodes/panel-grid",
   "main": "dist/panel-grid-react.js",
@@ -17,9 +17,11 @@
     "jest-environment-jsdom": "^29.7.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-resize-detector": "^10.0.1",
     "tsup": "^8.0.2",
-    "typescript": "^5.4.5",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "react-resize-detector": "^10.0.1",
     "usehooks-ts": "^3.1.0"
   },
   "peerDependencies": {

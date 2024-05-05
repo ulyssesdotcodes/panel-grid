@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <script type="module" src="dist/panel-grid.mjs"></script>
+    <script type="module">
+      import { html, fixture, expect } from "@open-wc/testing";
+      import { runTests } from "@web/test-runner-mocha";
+
+
+      runTests(async () => {
+        describe("panel-grid", () => {
+          it("renders", async () => {
+            const el = await fixture(html`<panel-grid> </panel-grid>`);
+            expect(el.style["grid-template-rows"]).toBe("200px 1fr 300px");
+          })
+        })
+      })
+
+    </script>
+  </head>
+  <body>
+    <panel-grid
+      gridtemplateareas="left centre right \n left centre right \n bottom bottom right"
+      grid-template-rows="200px 1fr 300px"
+      grid-template-columns="200px 1fr 300px"
+      >
+
+    </panel-grid>
+  </body>
+
+</html>
